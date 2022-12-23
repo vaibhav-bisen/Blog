@@ -64,7 +64,6 @@ class BlogPost(db.Model):
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
-    tag = db.Column(db.String(250), nullable=False)
     
     #***************Parent Relationship*************#
     comments = relationship("Comment", back_populates="parent_post")
@@ -180,18 +179,6 @@ def about():
 def contact():
     return render_template("contact.html", current_user=current_user)
 
-# Search query
-# @app.route("/search", methods=["GET", "POST"])
-# def search():
-#     if request.method == "POST":
-#         form = request.form
-#         search_value = form["query"]
-#         search = "%{0}%".format(search_value)
-#         result = BlogPost.query.filter(or_(BlogPost.title.like(search), BlogPost.subtitle.like(search), BlogPost.body.like(search)))
-#         return render_template("index.html", all_posts=result, current_user=current_user)
-#     else:
-#         return redirect("/")
-
 @app.route("/new-post", methods=["GET", "POST"])
 # Mark with admin decorator
 @admin_only
@@ -201,7 +188,6 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
-            tag = form.tag.data,
             body=form.body.data,
             img_url=form.img_url.data,
             author=current_user,
@@ -220,7 +206,6 @@ def edit_post(post_id):
     edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
-        tag=post.tag,
         img_url=post.img_url,
         author=current_user,
         body=post.body
@@ -228,7 +213,6 @@ def edit_post(post_id):
     if edit_form.validate_on_submit():
         post.title = edit_form.title.data
         post.subtitle = edit_form.subtitle.data
-        post.tag = edit_form.tag.data
         post.img_url = edit_form.img_url.data
         post.body = edit_form.body.data
         db.session.commit()
