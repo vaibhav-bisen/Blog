@@ -95,7 +95,7 @@ def get_all_posts():
     # Pagination
     page = request.args.get('page', 1, type=int)
     posts = BlogPost.query.paginate(
-        page=page, per_page=2)
+        page=page, per_page=6)
 
     return render_template("index.html", all_posts=posts, current_user=current_user, flag=True)
 
