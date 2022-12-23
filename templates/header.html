@@ -1,62 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>Vaibhav's Blog</title>
-
-  <!-- Bootstrap core CSS -->
-  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-
-  <!-- Custom fonts for this template -->
-  <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-  <!-- Custom styles for this template -->
-  <link href="{{ url_for('static', filename='css/clean-blog.min.css')}}" rel="stylesheet">
-
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Vaibhav's Blog</title>
+	<link rel="stylesheet" href="fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
+	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet"> <!-- https://fonts.google.com/ -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css')}} " rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/templatemo-xtra-blog.css')}} " rel="stylesheet">
 </head>
-
 <body>
-
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-    <div class="container">
-      <a class="navbar-brand" href="{{url_for('get_all_posts')}}">Vaibhav's Blog</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        Menu
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('get_all_posts') }}">Home</a>
-          </li>
-          {% if not current_user.is_authenticated: %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-          </li>
-          {% else: %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
-          </li>
-          {% endif %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('about') }}">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+	<header class="tm-header" id="tm-header">
+        <div class="tm-header-wrapper">
+            <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
+                <img src="{{ url_for('static', filename='icons/menu.png') }}">
+            </button>
+            <div class="tm-site-header">
+                <div class="mx-auto tm-site-logo"><img src="{{ url_for('static', filename='icons/x-mark.png') }}"></div>            
+                <h1 class="text-center">Vaibhav's Blog</h1>
+            </div>
+            <nav class="tm-nav" id="tm-nav">            
+                <ul>
+                    <li class="tm-nav-item"><a href="{{ url_for('get_all_posts') }}" class="tm-nav-link">
+                <img class="tm-pr-10 icon" src="{{ url_for('static', filename='icons/home.png') }}">
+                        Home
+                    </a></li>
+                    {% if not current_user.is_authenticated: %}
+                    <li class="tm-nav-item"><a href="{{ url_for('login') }}" class="tm-nav-link">
+                        <img class="tm-pr-10 icon" src="{{ url_for('static', filename='icons/login.png') }}">
+                        LogIn
+                    </a></li>
+                    <li class="tm-nav-item"><a href="{{ url_for('register') }}" class="tm-nav-link">
+                        <img class="tm-pr-10 icon" src="{{ url_for('static', filename='icons/user.png') }}">
+                        Register
+                    </a></li>
+                    {% else: %}
+                    <li class="tm-nav-item"><a href="{{ url_for('logout') }}" class="tm-nav-link">
+                        <img class="tm-pr-10 icon" src="{{ url_for('static', filename='icons/logout.png') }}">
+                        Log Out
+                    </a></li>
+                    {% endif %}
+                    <li class="tm-nav-item"><a href="{{ url_for('about') }}" class="tm-nav-link">
+                        <img class="tm-pr-10 icon" src="{{ url_for('static', filename='icons/user(1).png') }}"><i class="fas fa-users"></i>
+                        About Me
+                    </a></li>
+                    <li class="tm-nav-item"><a href="{{ url_for('contact') }}" class="tm-nav-link">
+                        <img class="tm-pr-10 icon" src="{{ url_for('static', filename='icons/email.png') }}"><i class="far fa-comments"></i>
+                        Contact Us
+                    </a></li>
+                </ul>
+            </nav>
+            <div class="tm-mb-30">
+                <a rel="nofollow" href="https://fb.com/templatemo" class="tm-social-link">
+                    <img src="{{ url_for('static', filename='icons/linkedin(1).png') }}">
+                    
+                </a>
+                <a href="https://twitter.com" class="tm-social-link">
+                    <img src="{{ url_for('static', filename='icons/github(1).png') }}">
+                </a>
+                <a href="https://instagram.com" class="tm-social-link">
+                    <img src="{{ url_for('static', filename='icons/twitter.png') }}">
+                </a>
+                <a href="https://linkedin.com" class="tm-social-link">
+                    <img src="{{ url_for('static', filename='icons/instagram.png') }}">
+                </a>
+            </div>
+            
+            <!-- <p class="tm-mb-80 pr-5 text-white">
+                Xtra Blog is a multi-purpose HTML template from TemplateMo website. Left side is a sticky menu bar. Right side content will scroll up and down.
+            </p> -->
+        </div>
+    </header>
+    <div class="container-fluid">
+        <main class="tm-main">
+            <!-- Search form -->
+            {% if flag: %}
+            <div class="row tm-row">
+                <div class="col-12">
+                    <form method="POST" class="form-inline tm-mb-80 tm-search-form" action="/search">                
+                        <input class="form-control tm-search-input" name="query" type="text" placeholder="Search..." aria-label="Search">
+                        <button class="tm-search-button" type="submit">
+                            <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+                        </button>                                
+                    </form>
+                </div>                
+            </div>   
+            {% endif %}

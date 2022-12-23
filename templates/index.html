@@ -1,56 +1,69 @@
 {% include "header.html" %}
 
-  <!-- Page Header -->
-  <header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1470092306007-055b6797ca72?ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80')">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="site-heading">
-            <h1>Vaibhav's Blog</h1>
-            <span class="subheading">A collection of random musings.</span>
-          </div>
-        </div>
+<div class="row tm-row">
+  {% for post in all_posts.items %}
+  <article class="col-12 col-md-6 tm-post">
+    <hr class="tm-hr-primary" />
+    <a
+      href="{{ url_for('show_post', post_id=post.id) }}"
+      class="effect-lily tm-post-link tm-pt-60"
+    >
+      <div class="tm-post-link-inner">
+        <img src="img/img-01.jpg" alt="Image" class="img-fluid" />
       </div>
-    </div>
-  </header>
+      
+      <span class="position-absolute tm-new-badge">New</span>
 
-  <!-- Main Content -->
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-        {% for post in all_posts %}
-        <div class="post-preview">
-          <a href="{{ url_for('show_post', post_id=post.id) }}">
-            <h2 class="post-title">
-              {{post.title}}
-            </h2>
-            <h3 class="post-subtitle">
-              {{post.subtitle}}
-            </h3>
-          </a>
-          <p class="post-meta">Posted by
-            
-            #Changed from post.author as post.author is now a User object.
-            {{post.author.name}}
-            on {{post.date}}
-            {% if current_user.id == 1: %}
-            <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a>
-            {% endif %}
-          </p>
-        </div>
+      <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ post.title }}</h2>
+    </a>
+    <p class="tm-pt-30">
+      {{ post.subtitle }} 
+      {% if current_user.id == 1: %}
+  <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a>
+      {% endif %}
+    </p>
+    <div class="d-flex justify-content-between tm-pt-45">
+      <span class="tm-color-primary">{{ post.date }}</span>
+    </div>
+    <hr />
+    <!-- <div class="d-flex justify-content-between">
+      <span>by Admin</span>
+    </div> -->
+  </article>
+  {% endfor %}
+
+  <!-- New Post -->
+<!--    If user id is 1 then they can see the Create New Post button -->
+{% if current_user.id == 1: %}
+<div class="clearfix">
+  <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
+</div>
+{% endif %}
+
+</div>
+<div class="row tm-row tm-mt-100 tm-mb-75">
+  <div class="tm-prev-next-wrapper">
+    <a
+      href="./?page={{ all_posts.prev_num }}"
+      class="mb-2 tm-btn tm-btn-primary tm-prev-next {% if not all_posts.has_prev %} disabled {% endif %} tm-mr-20"
+      >Prev</a
+    >
+    <a href="./?page={{ all_posts.next_num }}" class="mb-2 tm-btn tm-btn-primary tm-prev-next  {% if not all_posts.has_next %} disabled {% endif %}">Next</a>
+  </div>
+  <div class="tm-paging-wrapper">
+    <span class="d-inline-block mr-3">Page</span>
+    <nav class="tm-paging-nav d-inline-block">
+      <ul>
+
+        {% for page in all_posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+          <li class="tm-paging-item {% if page==all_posts.page %} active {% endif %}">
+            <a href="./?page={{ page }}" class="mb-2 tm-btn tm-paging-link">{{ page }}</a>
+          </li>
         {% endfor %}
 
-        <!-- New Post -->
-<!--    If user id is 1 then they can see the Create New Post button -->
-        {% if current_user.id == 1: %}
-        <div class="clearfix">
-          <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
-        </div>
-        {% endif %}
-      </div>
-    </div>
+      </ul>
+    </nav>
   </div>
-  <hr>
+</div>
 
 {% include "footer.html" %}

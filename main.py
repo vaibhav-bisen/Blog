@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -19,7 +19,7 @@ ckeditor = CKEditor(app)
 Bootstrap(app)
 
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
-##CONNECT TO DB
+# CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -31,20 +31,19 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-#Create admin-only decorator
+# Admin-only decorator
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        #If id is not 1 then return abort with 403 error
+        # If id is not 1 then return abort with 403 error
         if current_user.id != 1:
             return abort(403)
-        #Otherwise continue with the route function
+        # Otherwise continue with the route function
         return f(*args, **kwargs)        
     return decorated_function
   
 
-
-##CONFIGURE TABLES
+# CONFIGURE TABLES
 
 class User(UserMixin, db.Model):
     __tablename__ = "users"
@@ -54,7 +53,6 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100))
     posts = relationship("BlogPost", back_populates="author")
     comments = relationship("Comment", back_populates="comment_author")
-
 
 class BlogPost(db.Model):
     __tablename__ = "blog_posts"
@@ -66,10 +64,10 @@ class BlogPost(db.Model):
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
+    tag = db.Column(db.String(250), nullable=False)
     
     #***************Parent Relationship*************#
     comments = relationship("Comment", back_populates="parent_post")
-
 
 class Comment(db.Model):
     __tablename__ = "comments"
@@ -88,8 +86,19 @@ with app.app_context():
 
 @app.route('/')
 def get_all_posts():
-    posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts, current_user=current_user)
+    # Search
+    query = request.args.get("query")
+    if query:
+        posts = BlogPost.query.filter_by(BlogPost.title.contain("query") | BlogPost.subtitle.contain("query") | BlogPost.body.contain("query"))
+    else:
+        posts = BlogPost.query.all()
+        
+    # Pagination
+    page = request.args.get('page', 1, type=int)
+    posts = BlogPost.query.paginate(
+        page=page, per_page=2)
+
+    return render_template("index.html", all_posts=posts, current_user=current_user, flag=True)
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -99,7 +108,7 @@ def register():
 
         if User.query.filter_by(email=form.email.data).first():
             print(User.query.filter_by(email=form.email.data).first())
-            #User already exists
+            # User already exists
             flash("You've already signed up with that email, log in instead!")
             return redirect(url_for('login'))
 
@@ -159,8 +168,8 @@ def show_post(post_id):
         )
         db.session.add(new_comment)
         db.session.commit()
-
-    return render_template("post.html", post=requested_post, form=form, current_user=current_user)
+    posts = BlogPost.query.all()
+    return render_template("post.html", requested_post=requested_post, form=form, current_user=current_user, flag=True, all_posts=posts)
 
 @app.route("/about")
 def about():
@@ -171,9 +180,20 @@ def about():
 def contact():
     return render_template("contact.html", current_user=current_user)
 
+# Search query
+# @app.route("/search", methods=["GET", "POST"])
+# def search():
+#     if request.method == "POST":
+#         form = request.form
+#         search_value = form["query"]
+#         search = "%{0}%".format(search_value)
+#         result = BlogPost.query.filter(or_(BlogPost.title.like(search), BlogPost.subtitle.like(search), BlogPost.body.like(search)))
+#         return render_template("index.html", all_posts=result, current_user=current_user)
+#     else:
+#         return redirect("/")
 
 @app.route("/new-post", methods=["GET", "POST"])
-#Mark with decorator
+# Mark with admin decorator
 @admin_only
 def add_new_post():
     form = CreatePostForm()
@@ -181,6 +201,7 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
+            tag = form.tag.data,
             body=form.body.data,
             img_url=form.img_url.data,
             author=current_user,
@@ -199,6 +220,7 @@ def edit_post(post_id):
     edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
+        tag=post.tag,
         img_url=post.img_url,
         author=current_user,
         body=post.body
@@ -206,6 +228,7 @@ def edit_post(post_id):
     if edit_form.validate_on_submit():
         post.title = edit_form.title.data
         post.subtitle = edit_form.subtitle.data
+        post.tag = edit_form.tag.data
         post.img_url = edit_form.img_url.data
         post.body = edit_form.body.data
         db.session.commit()
@@ -229,4 +252,4 @@ def delete_post(post_id):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)

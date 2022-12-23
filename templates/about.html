@@ -1,31 +1,55 @@
-{% include "header.html" %}
-
-  <!-- Page Header -->
-  <header class="masthead" style="background-image: url({{ url_for('static', filename='img/about-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="page-heading">
-            <h1>About Me</h1>
-            <span class="subheading">This is what I do.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe nostrum ullam eveniet pariatur voluptates odit, fuga atque ea nobis sit soluta odio, adipisci quas excepturi maxime quae totam ducimus consectetur?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius praesentium recusandae illo eaque architecto error, repellendus iusto reprehenderit, doloribus, minus sunt. Numquam at quae voluptatum in officia voluptas voluptatibus, minus!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consequuntur magnam, excepturi aliquid ex itaque esse est vero natus quae optio aperiam soluta voluptatibus corporis atque iste neque sit tempora!</p>
-      </div>
-    </div>
-  </div>
-
-  <hr>
-
-  {% include "footer.html" %}
+{% include "header.html" %}          
+            <div class="row tm-row tm-mb-45">
+                <div class="col-12">
+                    <!-- <hr class="tm-hr-primary tm-mb-55"> -->
+                    <img src="{{ url_for('static', filename='img/profile_img.png') }}" alt="Profile Image" class="img-fluid">
+                </div>
+            </div>
+            <div class="row tm-row tm-mb-40">
+                <div class="col-12">                    
+                    <div class="mb-4">
+                        <h2 class="pt-2 tm-mb-40 tm-color-primary tm-post-title">About Me</h2>
+                        <p>Hello!</p>    
+                        <p>Welcome to my blog. I'm glad to see you. You want to know more about me <a href="https://vaibhav-bisen.github.io/cv/">check this!</a></p>                       
+                    </div>                    
+                </div>
+            </div>
+            <div class="row tm-row tm-mb-120">
+                <div class="col-lg-4 tm-about-col">
+                    <div class="tm-bg-gray tm-about-pad">
+                                           
+                        <h2 class="mb-3 tm-color-primary tm-post-title">Background</h2>
+                        <p class="mb-0 tm-line-height-short">
+                            I'm a web developer.<br> Who knowing C, C++, Java, Python, HTML, CSS, Bootstrap, Flask, SQLite.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <hr class="tm-hr-primary tm-mb-55">
+                    <p class="mb-3 tm-line-height-short">Follow on -</p>
+                    <ul class="tm-social-links">
+                        <li class="mb-2">
+                            <a href="https://facebook.com" class="d-flex align-items-center justify-content-center">
+                                <img src="{{ url_for('static', filename='icons/linkedin(1).png') }}">
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="https://twitter.com" class="d-flex align-items-center justify-content-center">
+                                <img src="{{ url_for('static', filename='icons/github(1).png') }}">
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="https://youtube.com" class="d-flex align-items-center justify-content-center">
+                                <img src="{{ url_for('static', filename='icons/twitter.png') }}">
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="https://instagram.com" class="d-flex align-items-center justify-content-center mr-0">
+                                <img src="{{ url_for('static', filename='icons/instagram.png') }}">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>            
+                   
+            {% include "footer.html" %}
